@@ -46,3 +46,7 @@ This README consolidates my learnings, focusing on the implementation of job and
 - **Takeaway**: Clear documentation and structured workflows enhance team collaboration and project scalability.
 
 # Thank You ALX 
+
+## Version
+Version: 1.0.0
+Released: July 24, 2025

@@ -8,6 +8,6 @@ urlpatterns = [
     path('auth/', include('authentication.urls')),
     path('jobs/', include('jobs.urls')),
     path('job_applications/', include('job_applications.urls')),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
