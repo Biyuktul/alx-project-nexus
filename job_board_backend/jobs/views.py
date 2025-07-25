@@ -4,11 +4,11 @@ from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 from .models import Category, Job
 from .serializers import JobSerializer, CategorySerializer
-from authentication.permissions import IsAdminOrUser
+from authentication.permissions import IsRecruiterOrJobSeeker
 from django.db.models import Q
 
 class CategoryListView(APIView):
-    permission_classes = [IsAdminOrUser]
+    permission_classes = [IsRecruiterOrJobSeeker]
 
     @swagger_auto_schema(
         operation_description="List all categories",
@@ -32,7 +32,7 @@ class CategoryListView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class CategoryDetailView(APIView):
-    permission_classes = [IsAdminOrUser]
+    permission_classes = [IsRecruiterOrJobSeeker]
 
     @swagger_auto_schema(
         operation_description="Get a category",
@@ -74,7 +74,7 @@ class CategoryDetailView(APIView):
             return Response({"error": "Category not found"}, status=status.HTTP_404_NOT_FOUND)
 
 class JobListView(APIView):
-    permission_classes = [IsAdminOrUser]
+    permission_classes = [IsRecruiterOrJobSeeker]
 
     @swagger_auto_schema(
         operation_description="List all published jobs with optional filters location, category, keyword",
@@ -106,14 +106,14 @@ class JobListView(APIView):
         responses={200: JobSerializer, 400: "Bad Request", 404: "Not Found"}
     )
     def post(self, request):
-        serializer = JobSerializer(data=request.data)
+        serializer = JobSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class JobDetailView(APIView):
-    permission_classes = [IsAdminOrUser]
+    permission_classes = [IsRecruiterOrJobSeeker]
 
     @swagger_auto_schema(
         operation_description="Get a job",
