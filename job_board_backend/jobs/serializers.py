@@ -18,3 +18,7 @@ class JobSerializer(serializers.ModelSerializer):
             'id', 'title', 'description', 'location', 'salary', 'type',
             'category', 'category_id', 'created_at', 'updated_at'
         ]
+    def create(self, validated_data):
+        # Ensure recruiter is set to the authenticated user
+        validated_data['recruiter'] = self.context['request'].user
+        return super().create(validated_data)
