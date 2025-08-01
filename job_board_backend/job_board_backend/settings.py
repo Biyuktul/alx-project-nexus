@@ -10,7 +10,7 @@ SECRET_KEY = 'django-insecure-+=r79$(ou-3lc%4u26sz88!a)3dwxn*+urjw(_6tr0qyrnp18$
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['172.31.76.115', 'localhost']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -69,6 +69,7 @@ DATABASES = {
         'PORT': env('DB_PORT'),
     }
 }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
