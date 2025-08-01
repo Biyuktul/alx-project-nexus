@@ -1,3 +1,4 @@
+# docker-compose.yml
 version: '3.8'
 services:
   web:
@@ -5,17 +6,19 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/jobboard
+      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}
     depends_on:
       - db
     volumes:
       - .:/app
+    env_file:
+      - .env
   db:
     image: postgres:15
     environment:
-      - POSTGRES_DB=jobboard
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
     volumes:
       - pgdata:/var/lib/postgresql/data
 volumes:
