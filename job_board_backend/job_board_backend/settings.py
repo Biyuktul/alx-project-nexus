@@ -1,6 +1,7 @@
 from pathlib import Path
 import environ
 import os
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
@@ -10,7 +11,7 @@ SECRET_KEY = 'django-insecure-+=r79$(ou-3lc%4u26sz88!a)3dwxn*+urjw(_6tr0qyrnp18$
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['172.31.76.115', 'localhost', 'ec2-44-192-71-182.compute-1.amazonaws.com']
+ALLOWED_HOSTS = ['172.31.76.115', '44.192.71.182', 'ec2-44-192-71-182.compute-1.amazonaws.com', 'localhost']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -32,6 +33,7 @@ AUTH_USER_MODEL = 'authentication.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -39,7 +41,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 ROOT_URLCONF = 'job_board_backend.urls'
 
 TEMPLATES = [
@@ -92,6 +94,9 @@ REST_FRAMEWORK = {
     ),
 }
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
         'Bearer': {
@@ -113,7 +118,5 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
-STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

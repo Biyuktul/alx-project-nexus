@@ -1,17 +1,32 @@
 version: '3.8'
+
 services:
   web:
     build: .
-    ports:
-      - "8000:8000"
+    command: gunicorn --config /app/gunicorn.conf.py --bind 0.0.0.0:8000 job_board_backend.wsgi:application
+    volumes:
+      - .:/app
+      - static_volume:/app/staticfiles
+      - ./gunicorn.conf.py:/app/gunicorn.conf.py
     environment:
       - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}
     depends_on:
       - db
-    volumes:
-      - .:/app
     env_file:
       - .env
+    expose:
+      - 8000  # Expose port internally for Nginx
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - static_volume:/usr/share/nginx/html/static
+    depends_on:
+      - web
+
   db:
     image: postgres:15
     environment:
@@ -20,5 +35,7 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
     volumes:
       - pgdata:/var/lib/postgresql/data
+
 volumes:
   pgdata:
+  static_volume:
