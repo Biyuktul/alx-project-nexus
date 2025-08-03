@@ -77,11 +77,11 @@ class JobListView(APIView):
     permission_classes = [IsRecruiterOrJobSeeker]
 
     @swagger_auto_schema(
-        operation_description="List all published jobs with optional filters location, category, keyword",
-        responses={200: JobSerializer(many=True), 201: "JobSerializer"},
-    )
+          operation_description="List all published jobs with optional filters: location, category, keyword",
+          responses={200: JobSerializer(many=True), 201: JobSerializer, 400: "Bad Request"}
+      )
     def get(self, request):
-        queryset = Job.objects.all()
+        queryset = Job.objects.select_related('category', 'posted_by').all()
         keyword = request.query_params.get('keyword')
         location = request.query_params.get('location')
         category = request.query_params.get('category')
@@ -90,16 +90,16 @@ class JobListView(APIView):
             queryset = queryset.filter(Q(title__icontains=keyword) | Q(description__icontains=keyword))
         if location:
             queryset = queryset.filter(location__icontains=location)
-        
         if category:
             try:
-                category_obj = Category.objects.get(id=category)
+                category_obj = Category.objects.get(name=category)
                 queryset = queryset.filter(category=category_obj)
             except Category.DoesNotExist:
                 return Response({"error": "Category not found"}, status=status.HTTP_400_BAD_REQUEST)
-        
+
         serializer = JobSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
     @swagger_auto_schema(
         operation_description="Create a new job (admin only)",
         request_body=JobSerializer,
