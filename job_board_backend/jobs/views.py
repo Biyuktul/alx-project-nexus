@@ -81,7 +81,7 @@ class JobListView(APIView):
           responses={200: JobSerializer(many=True), 201: JobSerializer, 400: "Bad Request"}
       )
     def get(self, request):
-        queryset = Job.objects.select_related('category', 'posted_by').all()
+        queryset = Job.objects.select_related('category', 'recruiter').all()
         keyword = request.query_params.get('keyword')
         location = request.query_params.get('location')
         category = request.query_params.get('category')
