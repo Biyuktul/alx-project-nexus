@@ -45,8 +45,23 @@ This README consolidates my learnings, focusing on the implementation of job and
 - **Modular Design**: Organized code into apps (`jobs`, `authentication`, `api_docs`) for maintainability.
 - **Takeaway**: Clear documentation and structured workflows enhance team collaboration and project scalability.
 
-# Thank You ALX 
+# Thank You ALX
+
+
+# JobBoard Backend
+## Setup
+- Clone: `git clone https://github.com/Biyuktul/alx-project-nexus.git`
+- Install: `docker compose build && docker compose up -d`
+- Migrate: `docker compose exec web python manage.py migrate`
+- Access: `http://localhost/`
+## Deployment
+- Version: v1.0.0
+- Deployed on AWS EC2 (Ubuntu 24.04) with Docker Compose (Django, PostgreSQL, Nginx).
+- Optimized job search with indexes on title, location, job_type, category.
+- Filtering: `/jobs/?location=Italy&category=Tech`
+- URL: `http://public_ip/`
+- API Endpoints: `auth/token/`, `/jobs/`, `/applications/`, `/categories/`, `/api/docs/swagger`, `/api/docs/redoc` 
 
 ## Version
-Version: 1.0.0
-Released: July 24, 2025
+Version: 1.2.0
+Released: AUG 3, 2025
